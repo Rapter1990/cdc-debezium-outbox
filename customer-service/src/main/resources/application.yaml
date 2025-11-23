@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: customer-service
+
+  # MYSQL
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    name: mysql
+    url: jdbc:mysql://${CUSTOMER_SERVICE_DB_IP:localhost}:${CUSTOMER_SERVICE_DB_PORT:3306}/customerdb
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:password}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+server:
+  port: 3434
