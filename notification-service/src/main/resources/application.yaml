@@ -1,3 +1,30 @@
 spring:
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: notification-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+
+  mail:
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    username: ${SPRING_MAIL_USERNAME:yourgmail@gmail.com}
+    password: ${SPRING_MAIL_PASSWORD:your-app-password}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
   application:
     name: notification-service
+
+notification:
+  mail:
+    to: ${MAIL_TO:your-target-mail@gmail.com}
+
+  # Topic from Debezium Outbox Event Router (aggregatetype = "customers")
+  outbox-topic: outbox.event.customers
+
+server:
+  port: 3435
