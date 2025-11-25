@@ -18,23 +18,43 @@ services:
     ports:
       - "9092:9092"
     environment:
-      # Single-node KRaft: broker + controller
       KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_NODE_ID: 1
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
-
-      # Listeners
       KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093"
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT_INTERNAL"
       KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
-
-      # Single-node cluster safety
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_LOG_MESSAGE_TIMESTAMP_DIFFERENCE_MAX_MS: "31536000000"  # 365 days
+    networks:
+      - localcdcdebeziumoutboxNetwork
+
+  kafka-init:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - kafka
+    entrypoint:
+      - bash
+      - -lc
+      - |
+        echo "===== kafka-init starting ====="
+        echo "Waiting for Kafka to start..."
+        sleep 20
+        echo "Creating topic customerdb.outbox_event..."
+        kafka-topics --create --if-not-exists \
+          --topic customerdb.outbox_event \
+          --bootstrap-server kafka:29092 \
+          --partitions 1 \
+          --replication-factor 1
+        echo "Done creating topic customerdb.outbox_event."
+        echo "Sleeping before exit..."
+        sleep 60
+        echo "===== kafka-init finished ====="
     networks:
       - localcdcdebeziumoutboxNetwork
 
@@ -70,6 +90,9 @@ services:
       timeout: 5s
       retries: 12
       start_period: 20s
+    volumes:
+      # init scripts to create tables etc.
+      - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - localcdcdebeziumoutboxNetwork
 

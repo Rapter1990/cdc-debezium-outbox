@@ -24,7 +24,7 @@ notification:
     to: ${MAIL_TO:your-target-mail@gmail.com}
 
   # Topic from Debezium Outbox Event Router (aggregatetype = "customers")
-  outbox-topic: outbox.event.customers
+  outbox-topic: customerdb.outbox_event
 
 server:
   port: 3435
