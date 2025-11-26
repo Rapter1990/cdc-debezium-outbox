@@ -6,6 +6,7 @@ import com.example.customerservice.model.dto.request.UpdateCustomerRequest;
 import com.example.customerservice.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Customer update(@PathVariable String id,
                            @Valid @RequestBody UpdateCustomerRequest request) {
         return service.update(id, request);

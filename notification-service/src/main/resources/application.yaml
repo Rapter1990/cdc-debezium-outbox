@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: "optional:file:.env[.properties],optional:file:../.env[.properties]"
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:

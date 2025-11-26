@@ -4,7 +4,7 @@ spring:
 
   # MYSQL
   config:
-    import: "optional:file:.env[.properties]"
+    import: "optional:file:.env[.properties],optional:file:../.env[.properties]"
   datasource:
     name: mysql
     url: jdbc:mysql://${CUSTOMER_SERVICE_DB_IP:localhost}:${CUSTOMER_SERVICE_DB_PORT:3307}/customerdb
