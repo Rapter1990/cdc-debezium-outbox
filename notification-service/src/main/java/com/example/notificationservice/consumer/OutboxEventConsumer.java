@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class OutboxEventConsumer {
 
     private final MailService mailService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "${notification.outbox-topic}", groupId = "notification-group")
     public void onOutboxEvent(String message) {
