@@ -1,20 +1,20 @@
 ## Case Study – CDC, Debezium, Kafka based Customer Notifications
 
 <p align="center">
-    <img src="screenshots/main_image.png" alt="CDC Debezium Kafka Customer Notification" width="800" height="550">
+    <img src="screenshots/main_image.png" alt="CDC Debezium Kafka Customer Notification" width="700" height="450">
 </p>
 
 ### 📖 Information
 
 ### Project Definition (Customer Service + CDC Outbox + Notification Service)
 
-A **Customer Service** exposes REST APIs to manage customers (create, update, delete, read).  
+* A **Customer Service** exposes REST APIs to manage customers (create, update, delete, read).  
 Each change on a customer creates a corresponding **Outbox Event** in the database.
 
-A **Debezium CDC connector** listens to the outbox table and publishes events to a **Kafka topic**.  
+* A **Debezium CDC connector** listens to the outbox table and publishes events to a **Kafka topic**.  
 A separate **Notification Service** consumes these events from Kafka and sends **email notifications** using `JavaMailSender`.
 
-This demonstrates the **Transactional Outbox Pattern** with **CDC (Change Data Capture)** via **Debezium** and **Kafka**.
+* This demonstrates the **Transactional Outbox Pattern** with **CDC (Change Data Capture)** via **Debezium** and **Kafka**.
 
 ---
 
@@ -41,6 +41,9 @@ Endpoints Summary
 * Docker
 * Docker Compose
 * Postman
+* Apache Kafka
+* Debezium
+* KafkaDrop
 
 -----
 
@@ -73,7 +76,7 @@ MAIL_TO={your-gmail-address}
 To build and run the application with `Maven`, please follow the directions shown below;
 
 ```sh
-$ git clone https://github.com/Rapter1990/xlsxziptotxtzip.git # (Assuming a new repo name)
+$ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
 $ cd cdc-debezium-outbox
 $ docker-compose -f docker-compose-local.yml up -d
 $ cd customer-service
@@ -93,6 +96,7 @@ The application can be built and run by the `Docker` engine. The `Dockerfile` ha
 Please follow directions shown below in order to build and run the application with Docker Compose file;
 
 ```sh
+$ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
 $ cd cdc-debezium-outbox
 $ docker-compose -f docker-compose.yml up -d 
 ```
