@@ -47,7 +47,7 @@ Endpoints Summary
 * Apache Kafka
 * Debezium
 * KafkaDrop
-* JavaMailSender (GMail)
+* JavaMailSender (Gmail)
 
 -----
 
