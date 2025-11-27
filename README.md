@@ -72,8 +72,8 @@ SPRING_MAIL_PASSWORD={your-gmail-password}
 MAIL_TO={your-gmail-address}
 ```
 
-### Maven Run
-To build and run the application with `Maven`, please follow the directions shown below;
+### Maven Run with Running Local Docker Compose Yml file
+To build and run the application with `Maven` with Running `Local Docker Compose Yml file`, please follow the directions shown below;
 
 ```sh
 $ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
@@ -94,23 +94,6 @@ $ mvn spring-boot:run
 The application can be built and run by the `Docker` engine. The `Dockerfile` has multistage build, so you do not need to build and run separately.
 
 Please follow directions shown below in order to build and run the application with Docker Compose file;
-
-Local Run
-
-```sh
-$ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
-$ cd cdc-debezium-outbox
-$ docker-compose -f docker-compose-local.yml up -d 
-```
-
-If you change anything in the project and run it on Docker, you can also use this command shown below
-
-```sh
-$ cd cdc-debezium-outbox
-$ docker-compose -f docker-compose-local.yml up -d --build
-```
-
-One Click Run
 
 ```sh
 $ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
