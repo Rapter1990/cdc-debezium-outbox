@@ -95,6 +95,23 @@ The application can be built and run by the `Docker` engine. The `Dockerfile` ha
 
 Please follow directions shown below in order to build and run the application with Docker Compose file;
 
+Local Run
+
+```sh
+$ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
+$ cd cdc-debezium-outbox
+$ docker-compose -f docker-compose-local.yml up -d 
+```
+
+If you change anything in the project and run it on Docker, you can also use this command shown below
+
+```sh
+$ cd cdc-debezium-outbox
+$ docker-compose -f docker-compose-local.yml up -d --build
+```
+
+One Click Run
+
 ```sh
 $ git clone https://github.com/Rapter1990/cdc-debezium-outbox.git
 $ cd cdc-debezium-outbox
@@ -107,6 +124,13 @@ If you change anything in the project and run it on Docker, you can also use thi
 $ cd cdc-debezium-outbox
 $ docker-compose -f docker-compose.yml up -d --build
 ```
+
+### Trace Logs in KafkaDrop
+
+Open in your browser at [http://localhost:9090](http://localhost:9090)
+- Go to topic created by Kafka whose name is `customerdb.outbox_event`
+- Go to `Partion` and Click
+- See Logs
 
 ### 📸 Screenshots
 
