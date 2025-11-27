@@ -14,6 +14,9 @@ Each change on a customer creates a corresponding **Outbox Event** in the databa
 * A **Debezium CDC connector** listens to the outbox table and publishes events to a **Kafka topic**.  
 A separate **Notification Service** consumes these events from Kafka and sends **email notifications** using `JavaMailSender`.
 
+* You can trace and debug the event flow by using **Kafdrop** at [http://localhost:9090](http://localhost:9090)
+  browse topics (e.g. **customerdb.outbox_event**), inspect partitions, and view individual messages produced from the outbox table.
+
 * This demonstrates the **Transactional Outbox Pattern** with **CDC (Change Data Capture)** via **Debezium** and **Kafka**.
 
 ---
