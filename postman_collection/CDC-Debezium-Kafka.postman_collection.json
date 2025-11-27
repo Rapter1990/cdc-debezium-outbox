@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "7fde6200-5c20-4f5a-9743-d24e757501f2",
+		"name": "CDC-Debezium-Kafka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33002673"
+	},
+	"item": [
+		{
+			"name": "Register MySql Connection",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mysql-outbox-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\r\n    \"tasks.max\": \"1\",\r\n    \"database.hostname\": \"mysql\",\r\n    \"database.port\": \"3306\",\r\n    \"database.user\": \"root\",\r\n    \"database.password\": \"password\",\r\n    \"database.server.id\": \"5400\",\r\n    \"topic.prefix\": \"customerdb\",\r\n    \"database.include.list\": \"customerdb\",\r\n    \"table.include.list\": \"customerdb.outbox_event\",\r\n    \"snapshot.mode\": \"always\",\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"kafka:29092\",\r\n    \"schema.history.internal.kafka.topic\": \"schemahistory.customerdb\",\r\n    \"tombstones.on.delete\": \"false\",\r\n    \"transforms\": \"outbox,route\",\r\n    \"transforms.outbox.type\": \"io.debezium.transforms.outbox.EventRouter\",\r\n    \"transforms.outbox.table.field.event.id\": \"id\",\r\n    \"transforms.outbox.table.field.event.key\": \"aggregateid\",\r\n    \"transforms.outbox.table.field.event.payload\": \"payload\",\r\n    \"transforms.outbox.table.field.event.type\": \"type\",\r\n    \"transforms.outbox.table.field.event.aggregate.type\": \"aggregatetype\",\r\n    \"transforms.outbox.table.expand.json.payload\": \"true\",\r\n    \"transforms.route.type\": \"org.apache.kafka.connect.transforms.RegexRouter\",\r\n    \"transforms.route.regex\": \"outbox\\\\.event\\\\..*\",\r\n    \"transforms.route.replacement\": \"customerdb.outbox_event\",\r\n    \"key.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\r\n    \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\r\n    \"key.converter.schemas.enable\": \"false\",\r\n    \"value.converter.schemas.enable\": \"false\",\r\n    \"include.schema.changes\": \"false\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST -H \"Content-Type: application/json\" \\\r\n  --data @register-mysql-outbox.json \\\r\n  http://localhost:8083/connectors"
+			},
+			"response": []
+		},
+		{
+			"name": "List Debezium Connectors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST -H \"Content-Type: application/json\" \\\r\n  --data @register-mysql-outbox.json \\\r\n  http://localhost:8083/connectors"
+			},
+			"response": []
+		},
+		{
+			"name": "Debezium MySql Connector Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/mysql-outbox-connector/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mysql-outbox-connector",
+						"status"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST -H \"Content-Type: application/json\" \\\r\n  --data @register-mysql-outbox.json \\\r\n  http://localhost:8083/connectors"
+			},
+			"response": []
+		},
+		{
+			"name": "Debezium MySql Connector Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/mysql-outbox-connector/config",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mysql-outbox-connector",
+						"config"
+					]
+				},
+				"description": "Generated from cURL: curl -s http://localhost:8083/connectors/mysql-outbox-connector/config | jq"
+			},
+			"response": []
+		},
+		{
+			"name": "Debezium MySql Connector Config Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mysql-outbox-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\r\n    \"tasks.max\": \"1\",\r\n\r\n    \"database.hostname\": \"mysql\",\r\n    \"database.port\": \"3306\",\r\n    \"database.user\": \"root\",\r\n    \"database.password\": \"password\",\r\n    \"database.server.id\": \"223344\",\r\n\r\n    \"topic.prefix\": \"customerdb\",\r\n    \"database.include.list\": \"customerdb\",\r\n    \"table.include.list\": \"customerdb.outboxevent\",\r\n    \"include.schema.changes\": \"false\",\r\n    \"snapshot.mode\": \"initial\",\r\n\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"kafka:29092\",\r\n    \"schema.history.internal.kafka.topic\": \"schemahistory.customerdb\",\r\n\r\n    \"transforms\": \"outbox\",\r\n    \"transforms.outbox.type\": \"io.debezium.transforms.outbox.EventRouter\",\r\n    \"transforms.outbox.route.by.field\": \"aggregatetype\",\r\n    \"transforms.outbox.route.topic.replacement\": \"outbox.event.${routedByValue}\",\r\n    \"transforms.outbox.table.field.event.id\": \"id\",\r\n    \"transforms.outbox.table.field.event.key\": \"aggregateid\",\r\n    \"transforms.outbox.table.field.event.payload\": \"payload\",\r\n    \"transforms.outbox.table.field.event.type\": \"type\",\r\n    \"transforms.outbox.table.field.event.timestamp\": \"created_at\",\r\n\r\n    \"topic.creation.default.replication.factor\": \"1\",\r\n    \"topic.creation.default.partitions\": \"1\",\r\n    \"topic.creation.default.cleanup.policy\": \"delete\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/mysql-outbox-connector/config",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mysql-outbox-connector",
+						"config"
+					]
+				},
+				"description": "Generated from cURL: curl -s http://localhost:8083/connectors/mysql-outbox-connector/config | jq"
+			},
+			"response": []
+		},
+		{
+			"name": "Debezium MySql Connector Pause",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mysql-outbox-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\r\n    \"tasks.max\": \"1\",\r\n\r\n    \"database.hostname\": \"mysql\",\r\n    \"database.port\": \"3306\",\r\n    \"database.user\": \"root\",\r\n    \"database.password\": \"password\",\r\n    \"database.server.id\": \"223344\",\r\n\r\n    \"topic.prefix\": \"customerdb\",\r\n    \"database.include.list\": \"customerdb\",\r\n    \"table.include.list\": \"customerdb.outboxevent\",\r\n    \"include.schema.changes\": \"false\",\r\n    \"snapshot.mode\": \"initial\",\r\n\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"kafka:29092\",\r\n    \"schema.history.internal.kafka.topic\": \"schemahistory.customerdb\",\r\n\r\n    \"transforms\": \"outbox\",\r\n    \"transforms.outbox.type\": \"io.debezium.transforms.outbox.EventRouter\",\r\n    \"transforms.outbox.route.by.field\": \"aggregatetype\",\r\n    \"transforms.outbox.route.topic.replacement\": \"outbox.event.${routedByValue}\",\r\n    \"transforms.outbox.table.field.event.id\": \"id\",\r\n    \"transforms.outbox.table.field.event.key\": \"aggregateid\",\r\n    \"transforms.outbox.table.field.event.payload\": \"payload\",\r\n    \"transforms.outbox.table.field.event.type\": \"type\",\r\n    \"transforms.outbox.table.field.event.timestamp\": \"created_at\",\r\n\r\n    /* ✨ IMPORTANT: let Debezium create topics */\r\n    \"topic.creation.default.replication.factor\": \"1\",\r\n    \"topic.creation.default.partitions\": \"1\",\r\n    \"topic.creation.default.cleanup.policy\": \"delete\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/mysql-outbox-connector/pause",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mysql-outbox-connector",
+						"pause"
+					]
+				},
+				"description": "Generated from cURL: curl -s http://localhost:8083/connectors/mysql-outbox-connector/config | jq"
+			},
+			"response": []
+		},
+		{
+			"name": "Debezium MySql Connector Resume",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mysql-outbox-connector\",\r\n  \"config\": {\r\n    \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\r\n    \"tasks.max\": \"1\",\r\n\r\n    \"database.hostname\": \"mysql\",\r\n    \"database.port\": \"3306\",\r\n    \"database.user\": \"root\",\r\n    \"database.password\": \"password\",\r\n    \"database.server.id\": \"223344\",\r\n\r\n    \"topic.prefix\": \"customerdb\",\r\n    \"database.include.list\": \"customerdb\",\r\n    \"table.include.list\": \"customerdb.outboxevent\",\r\n    \"include.schema.changes\": \"false\",\r\n    \"snapshot.mode\": \"initial\",\r\n\r\n    \"schema.history.internal.kafka.bootstrap.servers\": \"kafka:29092\",\r\n    \"schema.history.internal.kafka.topic\": \"schemahistory.customerdb\",\r\n\r\n    \"transforms\": \"outbox\",\r\n    \"transforms.outbox.type\": \"io.debezium.transforms.outbox.EventRouter\",\r\n    \"transforms.outbox.route.by.field\": \"aggregatetype\",\r\n    \"transforms.outbox.route.topic.replacement\": \"outbox.event.${routedByValue}\",\r\n    \"transforms.outbox.table.field.event.id\": \"id\",\r\n    \"transforms.outbox.table.field.event.key\": \"aggregateid\",\r\n    \"transforms.outbox.table.field.event.payload\": \"payload\",\r\n    \"transforms.outbox.table.field.event.type\": \"type\",\r\n    \"transforms.outbox.table.field.event.timestamp\": \"created_at\",\r\n\r\n    /* ✨ IMPORTANT: let Debezium create topics */\r\n    \"topic.creation.default.replication.factor\": \"1\",\r\n    \"topic.creation.default.partitions\": \"1\",\r\n    \"topic.creation.default.cleanup.policy\": \"delete\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/connectors/mysql-outbox-connector/resume",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mysql-outbox-connector",
+						"resume"
+					]
+				},
+				"description": "Generated from cURL: curl -s http://localhost:8083/connectors/mysql-outbox-connector/config | jq"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete MySql Connector",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/connectors/mysql-outbox-connector",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						"mysql-outbox-connector"
+					]
+				},
+				"description": "Generated from cURL: curl -X DELETE http://localhost:8083/connectors/mysql-outbox-connector"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Customer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"customername.customersurrname@example.com\",\r\n    \"firstName\":\"Customer Name\",\r\n    \"lastName\":\"Customer Surname\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3434/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3434",
+					"path": [
+						"customers"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8081/customers \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\":\"john.doe@example.com\",\"firstName\":\"John\",\"lastName\":\"Doe\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer By Id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3434/customers/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3434",
+					"path": [
+						"customers",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "98818cf5-9785-480f-a931-1573561e3462"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8081/customers \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\":\"john.doe@example.com\",\"firstName\":\"John\",\"lastName\":\"Doe\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer By Id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"updated.customer@example.com\",\r\n    \"firstName\": \"Updated Name\",\r\n    \"lastName\": \"Updated Surname\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3434/customers/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3434",
+					"path": [
+						"customers",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "98818cf5-9785-480f-a931-1573561e3462"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8081/customers \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\":\"john.doe@example.com\",\"firstName\":\"John\",\"lastName\":\"Doe\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Customer By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3434/customers/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3434",
+					"path": [
+						"customers",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "98818cf5-9785-480f-a931-1573561e3462"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8081/customers \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"email\":\"john.doe@example.com\",\"firstName\":\"John\",\"lastName\":\"Doe\"}'"
+			},
+			"response": []
+		}
+	]
+}

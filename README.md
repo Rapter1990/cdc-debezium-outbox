@@ -108,6 +108,57 @@ $ cd cdc-debezium-outbox
 $ docker-compose -f docker-compose.yml up -d --build
 ```
 
+### MYSQL Connector to Debezium
+* Register My Connector To Debezium
+```sh
+curl -X POST http://localhost:8083/connectors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "mysql-outbox-connector",
+    "config": {
+      "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+      "tasks.max": "1",
+      "database.hostname": "mysql",
+      "database.port": "3306",
+      "database.user": "root",
+      "database.password": "password",
+      "database.server.id": "5400",
+      "topic.prefix": "customerdb",
+      "database.include.list": "customerdb",
+      "table.include.list": "customerdb.outbox_event",
+      "snapshot.mode": "always",
+      "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+      "schema.history.internal.kafka.topic": "schemahistory.customerdb",
+      "tombstones.on.delete": "false",
+      "transforms": "outbox,route",
+      "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+      "transforms.outbox.table.field.event.id": "id",
+      "transforms.outbox.table.field.event.key": "aggregateid",
+      "transforms.outbox.table.field.event.payload": "payload",
+      "transforms.outbox.table.field.event.type": "type",
+      "transforms.outbox.table.field.event.aggregate.type": "aggregatetype",
+      "transforms.outbox.table.expand.json.payload": "true",
+      "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+      "transforms.route.regex": "outbox\\.event\\..*",
+      "transforms.route.replacement": "customerdb.outbox_event",
+      "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "key.converter.schemas.enable": "false",
+      "value.converter.schemas.enable": "false",
+      "include.schema.changes": "false"
+    }
+  }'
+```
+* List Debezium Connector
+```sh
+curl -X GET http://localhost:8083/connectors
+```
+
+* Check the Status of Debezium Connector
+```sh
+curl -X GET http://localhost:8083/connectors/mysql-outbox-connector/status
+```
+
 ### Trace Logs in KafkaDrop
 
 Open in your browser at [http://localhost:9090](http://localhost:9090)
