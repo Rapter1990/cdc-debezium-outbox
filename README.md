@@ -19,6 +19,20 @@ A separate **Notification Service** consumes these events from Kafka and sends *
 
 * This demonstrates the **Transactional Outbox Pattern** with **CDC (Change Data Capture)** via **Debezium** and **Kafka**.
 
+### 🔍 How Debezium Reads Outbox Events
+
+The Debezium MySQL connector does **not** poll the outbox table directly.  
+Instead, it connects to MySQL **like a replica** and reads changes from the **MySQL binary logs (binlog)**:
+
+1. The application performs an `INSERT` into the **outbox table** (e.g. `outbox_event`) within the same local transaction as the business change (customer create/update/delete).
+2. MySQL writes this `INSERT` operation to its **binary log (binlog)**.
+3. The **Debezium MySQL connector** tails the binlog and **sees the insert event** for the outbox table.
+4. Based on the connector configuration (e.g. `database.include.list`, `table.include.list`), Debezium **filters for the outbox table events**.
+5. Debezium then **publishes these events to Kafka** (for example, to the `customerdb.outbox_event` topic).
+6. The **Notification Service** consumes the Kafka message and triggers the corresponding **email notification**.
+
+In summary, **the true data source for Debezium is the MySQL binlog**, while the **outbox table** is the *logical* source of domain events your services write to.
+
 ---
 
 ### Explore Rest APIs
